@@ -83,7 +83,7 @@ public class PuntuacioTest {
         float puntuacioReal = puntuacio.calcularPuntuacio(palabraEdivinada,3);
         assertEquals(90,puntuacioReal);
     }
-//nvl 1=200, 2=400, 3=600 si no hi ha paraula bonus, si hi ha +100
+//nvl 1=200, 2=400, 3=600 si no hi ha paraula bonus, si hi ha +10
     @Test
     public void testCalcularPuntuacio3() {
         String paraula=puntuacio.getParaulaSecretaDificultat(1);
