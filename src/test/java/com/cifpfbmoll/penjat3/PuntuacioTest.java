@@ -138,4 +138,43 @@ public class PuntuacioTest {
         float puntuacioReal = puntuacio.calcularPuntuacio(palabraEndevinada,3);
         assertEquals(puntuacioEsperada,puntuacioReal);
     }
+
+
+    @Test
+    public void testCalcularPuntuacio6() throws InterruptedException {
+        String paraula=puntuacio.getParaulaSecretaDificultat(3);
+        String [] palabraEndevinada = new String[paraula.length()];
+        for (int n = 0; n < paraula.length(); n++) {
+                palabraEndevinada[n] =String.valueOf(paraula.charAt(n)) ;
+        }
+        int puntuacioEsperada;
+        if (paraula.contains("x") || paraula.contains("y") || paraula.contains("h")){
+            puntuacioEsperada=560;
+        }
+        else{
+            puntuacioEsperada=550;
+        }
+        Thread.sleep(50000);
+        float puntuacioReal = puntuacio.calcularPuntuacio(palabraEndevinada,3);
+        assertEquals(puntuacioEsperada,puntuacioReal);
+    }
+
+    @Test
+    public void testCalcularPuntuacio7() throws InterruptedException {
+        String paraula=puntuacio.getParaulaSecretaDificultat(2);
+        String [] palabraEndevinada = new String[paraula.length()];
+        for (int n = 0; n < paraula.length(); n++) {
+                palabraEndevinada[n] =String.valueOf(paraula.charAt(n)) ;
+        }
+        int puntuacioEsperada;
+        if (paraula.contains("x") || paraula.contains("y") || paraula.contains("h")){
+            puntuacioEsperada=350;
+        }
+        else{
+            puntuacioEsperada=340;
+        }
+        Thread.sleep(60000);
+        float puntuacioReal = puntuacio.calcularPuntuacio(palabraEndevinada,3);
+        assertEquals(puntuacioEsperada,puntuacioReal);
+    }
 }
