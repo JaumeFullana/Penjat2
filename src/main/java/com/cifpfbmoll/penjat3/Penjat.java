@@ -1,7 +1,10 @@
 package com.cifpfbmoll.penjat3;
 
 import java.awt.*;
-
+/**
+ * 
+ * @author Jaume
+ */
 public class Penjat {
 
     public static void main(String[] args) {
