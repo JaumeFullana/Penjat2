@@ -6,6 +6,9 @@
 package com.cifpfbmoll.penjat3;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -28,34 +31,21 @@ public class PuntuacioTest {
     }
 
     /**
-     * Metode test que corr el metode getParaulaSecretaDificultat damunt la instancia
-     * puntuacio, pasant per parametre un 1, i comprova si el intents que es guarden 
-     * en la instancia es igual a 5.
+     * Metode parameterizedTest que corr el metode getParaulaSecretaDificultat damunt la instancia
+     * puntuacio y comprova el nombre de intents. Se li pasen per parametre un valors int que se emplearan
+     * com a dificultat que es pasa al metode getParaulaSecretaDificultat i com a intents, que sera el nombre
+     * de intents que hauria de tenir l'usuari i que s'hauran guardad en l'atribut intents de la instancia puntuacio,
+     * aixo es comprova a traves de l'assertEquals.
      */
-    @Test
-    public void testGetParaulaSecretaDificultat1(){
-        puntuacio.getParaulaSecretaDificultat(1);
-        assertEquals(5,puntuacio.getIntents());
-    }
-    /**
-     * Metode test que corr el metode getParaulaSecretaDificultat damunt la instancia
-     * puntuacio, pasant per parametre un 2, i comprova si el intents que es guarden 
-     * en la instancia es igual a 4.
-     */
-    @Test
-    public void testGetParaulaSecretaDificultat2() {
-        puntuacio.getParaulaSecretaDificultat(2);
-        assertEquals(4,puntuacio.getIntents());
-    }
-    /**
-     * Metode test que corr el metode getParaulaSecretaDificultat damunt la instancia
-     * puntuacio, pasant per parametre un 7, i comprova si el intents que es guarden 
-     * en la instancia es igual a 0.
-     */
-    @Test
-    public void testGetParaulaSecretaDificultat3() {
-        puntuacio.getParaulaSecretaDificultat(7);
-        assertEquals(0,puntuacio.getIntents());
+    @ParameterizedTest
+    @CsvSource({
+        "1, 5",
+        "2, 4",
+        "7, 0"
+    })
+    public void testGetParaulaSecretaDificultat123(int dificultat, int intents){
+        puntuacio.getParaulaSecretaDificultat(dificultat);
+        assertEquals(intents,puntuacio.getIntents());
     }
     /**
      * Metode test que comprova si la funcio getParaulaSecretaDificultat retorna les
@@ -130,150 +120,73 @@ public class PuntuacioTest {
         assertEquals(90,puntuacioReal);
     }
     /** 
-     * Metode test que prova quants de punts es consegueixen amb una praulaEndevinada concreta.
+     * Metode parametrizedTest que prova quants de punts es consegueixen amb una praulaEndevinada concreta.
      * Primer crea una String paraula que rep el valor de la funcio getParaulaSecretaDificultat
-     * pasantli per parametre un int 1. Crea una Array de Strings palabraEndevinada amb una
+     * pasantli per parametre un int dificultat. Crea una Array de Strings palabraEndevinada amb una
      * llaragaria igual a la String paraula creada antes, despres assigna a cada index de 
      * palabraEndevinada el caracter d'aquell mateix index en la String paraula, a traves de un for.
-     * Despres es crea un int anomenat puntuacioEsperada que es igual a 210 si la String paraula conte 
-     * els caracters: "x", "y" o "h" o a 200 si no conte cap d'aquests caracters. Despres es crea un 
+     * Despres es crea un int anomenat puntuacioEsperada que es igual a puntuacioAmbCaracter si la String paraula conte 
+     * els caracters: "x", "y" o "h" o a puntuacioSenseCaracter si no conte cap d'aquests caracters. Despres es crea un 
      * float puntuacioReal que rep el valor que retorna la funcio calcularPuntuacio, que rep per 
-     * parametre la Array de Strings palabraEndevinada i un int 3. Despres comprova si 
+     * parametre la Array de Strings palabraEndevinada i un int vides. Despres comprova si 
      * puntuacioEsperada es igual a puntuacioReal.
      */
-    @Test
-    public void testCalcularPuntuacio3() {
-        String paraula=puntuacio.getParaulaSecretaDificultat(1);
+    @ParameterizedTest
+    @CsvSource({
+        "1, 210, 200, 3",
+        "2, 410, 400, 3",
+        "3, 610, 600, 3"
+    })
+    public void testCalcularPuntuacio345(int dificultat, int puntuacioAmbCaracter, 
+    int puntuacioSenseCaracter, int vides) {
+        String paraula=puntuacio.getParaulaSecretaDificultat(dificultat);
         String [] palabraEndevinada = new String[paraula.length()];
         for (int n = 0; n < paraula.length(); n++) {
                 palabraEndevinada[n]=String.valueOf(paraula.charAt(n)) ;
         }
         int puntuacioEsperada;
         if (paraula.contains("x") || paraula.contains("y") || paraula.contains("h")){
-            puntuacioEsperada=210;
+            puntuacioEsperada=puntuacioAmbCaracter;
         }
         else{
-            puntuacioEsperada=200;
+            puntuacioEsperada=puntuacioSenseCaracter;
         }
-        float puntuacioReal = puntuacio.calcularPuntuacio(palabraEndevinada,3);
+        float puntuacioReal = puntuacio.calcularPuntuacio(palabraEndevinada,vides);
         assertEquals(puntuacioEsperada,puntuacioReal);
     }
     /** 
      * Metode test que prova quants de punts es consegueixen amb una praulaEndevinada concreta.
      * Primer crea una String paraula que rep el valor de la funcio getParaulaSecretaDificultat
-     * pasantli per parametre un int 2. Crea una Array de Strings palabraEndevinada amb una
+     * pasantli per parametre un int dificultat. Crea una Array de Strings palabraEndevinada amb una
      * llaragaria igual a la String paraula creada antes, despres assigna a cada index de 
      * palabraEndevinada el caracter d'aquell mateix index en la String paraula, a traves de un for.
-     * Despres es crea un int anomenat puntuacioEsperada que es igual a 410 si la String paraula conte 
-     * els caracters: "x", "y" o "h" o a 400 si no conte cap d'aquests caracters. Despres es crea un 
-     * float puntuacioReal que rep el valor que retorna la funcio calcularPuntuacio, que rep per 
-     * parametre la Array de Strings palabraEndevinada i un int 3. Despres comprova si 
-     * puntuacioEsperada es igual a puntuacioReal.
-     */
-    @Test
-    public void testCalcularPuntuacio4() {
-        String paraula=puntuacio.getParaulaSecretaDificultat(2);
-        String [] palabraEndevinada = new String[paraula.length()];
-        for (int n = 0; n < paraula.length(); n++) {
-                palabraEndevinada[n] =String.valueOf(paraula.charAt(n)) ;
-        }
-        int puntuacioEsperada;
-        if (paraula.contains("x") || paraula.contains("y") || paraula.contains("h")){
-            puntuacioEsperada=410;
-        }
-        else{
-            puntuacioEsperada=400;
-        }
-        float puntuacioReal = puntuacio.calcularPuntuacio(palabraEndevinada,3);
-        assertEquals(puntuacioEsperada,puntuacioReal);
-    }
-    /** 
-     * Metode test que prova quants de punts es consegueixen amb una praulaEndevinada concreta.
-     * Primer crea una String paraula que rep el valor de la funcio getParaulaSecretaDificultat
-     * pasantli per parametre un int 3. Crea una Array de Strings palabraEndevinada amb una
-     * llaragaria igual a la String paraula creada antes, despres assigna a cada index de 
-     * palabraEndevinada el caracter d'aquell mateix index en la String paraula, a traves de un for.
-     * Despres es crea un int anomenat puntuacioEsperada que es igual a 610 si la String paraula conte 
-     * els caracters: "x", "y" o "h" o a 600 si no conte cap d'aquests caracters. Despres es crea un 
-     * float puntuacioReal que rep el valor que retorna la funcio calcularPuntuacio, que rep per 
-     * parametre la Array de Strings palabraEndevinada i un int 3. Despres comprova si 
-     * puntuacioEsperada es igual a puntuacioReal.
-     */
-    @Test
-    public void testCalcularPuntuacio5() {
-        String paraula=puntuacio.getParaulaSecretaDificultat(3);
-        String [] palabraEndevinada = new String[paraula.length()];
-        for (int n = 0; n < paraula.length(); n++) {
-                palabraEndevinada[n] =String.valueOf(paraula.charAt(n)) ;
-        }
-        int puntuacioEsperada;
-        if (paraula.contains("x") || paraula.contains("y") || paraula.contains("h")){
-            puntuacioEsperada=610;
-        }
-        else{
-            puntuacioEsperada=600;
-        }
-        float puntuacioReal = puntuacio.calcularPuntuacio(palabraEndevinada,3);
-        assertEquals(puntuacioEsperada,puntuacioReal);
-    }
-    /** 
-     * Metode test que prova quants de punts es consegueixen amb una praulaEndevinada concreta.
-     * Primer crea una String paraula que rep el valor de la funcio getParaulaSecretaDificultat
-     * pasantli per parametre un int 3. Crea una Array de Strings palabraEndevinada amb una
-     * llaragaria igual a la String paraula creada antes, despres assigna a cada index de 
-     * palabraEndevinada el caracter d'aquell mateix index en la String paraula, a traves de un for.
-     * Despres es crea un int anomenat puntuacioEsperada que es igual a 560 si la String paraula conte 
-     * els caracters: "x", "y" o "h" o a 550 si no conte cap d'aquests caracters. Despres es pausa
-     * l'execucio del metode durant 50 segons,una vegada passats els 50 segons es crea un float puntuacioReal 
+     * Despres es crea un int anomenat puntuacioEsperada que es igual a puntuacioAmbCaracter si la String paraula conte 
+     * els caracters: "x", "y" o "h" o a puntuacioSenseCaracter si no conte cap d'aquests caracters. Despres es pausa
+     * l'execucio del metode durant tempsPausa segons,una vegada passat el temps pausa es crea un float puntuacioReal 
      * que rep el valor que retorna la funcio calcularPuntuacio, que rep per parametre la Array de Strings 
-     * palabraEndevinada i un int 3. Despres comprova si puntuacioEsperada es igual a puntuacioReal.
+     * palabraEndevinada i un int vides. Despres comprova si puntuacioEsperada es igual a puntuacioReal.
      */
-    @Test
-    public void testCalcularPuntuacio6() throws InterruptedException {
-        String paraula=puntuacio.getParaulaSecretaDificultat(3);
+    @ParameterizedTest
+    @CsvSource({
+        "3, 560, 550, 50000, 3",
+        "2, 350, 340, 60000, 3"
+    })
+    public void testCalcularPuntuacio67(int dificultat, int puntuacioAmbCaracter, 
+    int puntuacioSenseCaracter,int tempsPausa ,int vides) throws InterruptedException {
+        String paraula=puntuacio.getParaulaSecretaDificultat(dificultat);
         String [] palabraEndevinada = new String[paraula.length()];
         for (int n = 0; n < paraula.length(); n++) {
                 palabraEndevinada[n] =String.valueOf(paraula.charAt(n)) ;
         }
         int puntuacioEsperada;
         if (paraula.contains("x") || paraula.contains("y") || paraula.contains("h")){
-            puntuacioEsperada=560;
+            puntuacioEsperada=puntuacioAmbCaracter;
         }
         else{
-            puntuacioEsperada=550;
+            puntuacioEsperada=puntuacioSenseCaracter;
         }
-        Thread.sleep(50000);
-        float puntuacioReal = puntuacio.calcularPuntuacio(palabraEndevinada,3);
-        assertEquals(puntuacioEsperada,puntuacioReal);
-    }
-    /** 
-     * Metode test que prova quants de punts es consegueixen amb una praulaEndevinada concreta.
-     * Primer crea una String paraula que rep el valor de la funcio getParaulaSecretaDificultat
-     * pasantli per parametre un int 2. Crea una Array de Strings palabraEndevinada amb una
-     * llaragaria igual a la String paraula creada antes, despres assigna a cada index de 
-     * palabraEndevinada el caracter d'aquell mateix index en la String paraula, a traves de un for.
-     * Despres es crea un int anomenat puntuacioEsperada que es igual a 350 si la String paraula conte 
-     * els caracters: "x", "y" o "h" o a 540 si no conte cap d'aquests caracters. Despres es pausa
-     * l'execucio del metode durant 60 segons,una vegada passats els 60 segons es crea un float puntuacioReal 
-     * que rep el valor que retorna la funcio calcularPuntuacio, que rep per parametre la Array de Strings 
-     * palabraEndevinada i un int 3. Despres comprova si puntuacioEsperada es igual a puntuacioReal.
-     */
-    @Test
-    public void testCalcularPuntuacio7() throws InterruptedException {
-        String paraula=puntuacio.getParaulaSecretaDificultat(2);
-        String [] palabraEndevinada = new String[paraula.length()];
-        for (int n = 0; n < paraula.length(); n++) {
-                palabraEndevinada[n] =String.valueOf(paraula.charAt(n)) ;
-        }
-        int puntuacioEsperada;
-        if (paraula.contains("x") || paraula.contains("y") || paraula.contains("h")){
-            puntuacioEsperada=350;
-        }
-        else{
-            puntuacioEsperada=340;
-        }
-        Thread.sleep(60000);
-        float puntuacioReal = puntuacio.calcularPuntuacio(palabraEndevinada,3);
+        Thread.sleep(tempsPausa);
+        float puntuacioReal = puntuacio.calcularPuntuacio(palabraEndevinada,vides);
         assertEquals(puntuacioEsperada,puntuacioReal);
     }
 }
